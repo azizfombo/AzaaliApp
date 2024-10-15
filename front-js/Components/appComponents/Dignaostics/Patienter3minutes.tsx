@@ -1,20 +1,28 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import React from "react";
+import {useNavigation} from "@react-navigation/native";
 
-export default function patienter3minutes() {
+export default function Patienter3minutes() {
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <Image
-                source={require('@/assets/imagesAzaali/MPO.png')}
+                source={require('../../../assets/imagesAzaali/MPO.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />
             <Text style={styles.title}>PATIENTEZ 3 MINUTES</Text>
             <View style={styles.navigation}>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity style={styles.navButton} onPress={() => {
+                    // @ts-ignore
+                    navigation.navigate('BouleDansEau')
+                }}>
                     <Text style={styles.navText}>◀</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity style={styles.navButton} onPress={() => {
+                    // @ts-ignore
+                    navigation.navigate('ResultatTestPorosite')
+                }}>
                     <Text style={styles.navText}>▶</Text>
                 </TouchableOpacity>
             </View>

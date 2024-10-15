@@ -1,12 +1,13 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import React, {useState} from "react";
+import {useNavigation} from "@react-navigation/native";
 
 export default function CommencerTestPorosite() {
-    const [selectedOption, setSelectedOption] = useState(null);
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <Image
-                source={require('@/assets/imagesAzaali/MPO.png')}
+                source={require('../../../assets/imagesAzaali/MPO.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />
@@ -17,6 +18,8 @@ export default function CommencerTestPorosite() {
                 AVEZ BEAU HYDRATER VAPORISER.VOUS AVEZ BEAU HYDRATER VAPORISER.VOUS AVEZ BEAU HYDRATER VAPORISER... VOS
                 CHEVEUX VOUS SEMBLENT TOUJOURS AUSSI SECS?</Text>
             <TouchableOpacity style={styles.loginButton} onPress={() => {
+                // @ts-ignore
+                navigation.navigate('BouleDansEau');
             }}>
                 <Text style={styles.loginButtonText}>Commencer</Text>
             </TouchableOpacity>

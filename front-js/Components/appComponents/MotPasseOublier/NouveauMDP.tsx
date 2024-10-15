@@ -1,20 +1,22 @@
 import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import {useState} from "react";
+import {useNavigation} from "@react-navigation/native";
 
 export default function NouveauMDP() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const handleLogin = () => {
-        console.log("Conexion avevc ", email);
+    const navigation = useNavigation();
+    const handleMDPReussi = () => {
+        // @ts-ignore
+        navigation.navigate('MDPReuissi');
     };
 
     return (
         <View style={styles.container}>
 
             <Image
-                source={require('@/assets/imagesAzaali/CNMP.png')}
+                source={require('../../../assets/imagesAzaali/CNMP.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />
@@ -40,7 +42,7 @@ export default function NouveauMDP() {
             />
             <Text></Text>
             <Text></Text>
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <TouchableOpacity style={styles.loginButton} onPress={handleMDPReussi}>
                 <Text style={styles.loginButtonText}>Mettre à jour</Text>
             </TouchableOpacity>
 

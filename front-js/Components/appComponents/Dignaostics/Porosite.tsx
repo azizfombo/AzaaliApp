@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from "@react-navigation/native";
 
 const PorositeCheveux = () => {
     const [selectedOption, setSelectedOption] = useState(null);
-
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <Text style={styles.title}>QUELLE EST LA POROSITÉ DE VOS CHEVEUX ?</Text>
@@ -28,7 +29,15 @@ const PorositeCheveux = () => {
                 <TouchableOpacity style={styles.navButton}>
                     <Text style={styles.navText}>◀</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity style={styles.navButton} onPress={() => {
+                    if (selectedOption === 'Je ne sais pas') {
+                        // @ts-ignore
+                        navigation.navigate("CommencerTestPorosite")
+                    } else {
+                        // @ts-ignore
+                        navigation.navigate("Accueil")
+                    }
+                }}>
                     <Text style={styles.navText}>▶</Text>
                 </TouchableOpacity>
             </View>
@@ -51,9 +60,9 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     option: {
-        width: '100%',
+        width: '50%',
         padding: 15,
-        borderRadius: 8,
+        borderRadius: 30,
         marginVertical: 10,
         backgroundColor: '#fff',
         alignItems: 'center',

@@ -1,39 +1,45 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import {useState} from "react";
 import {useNavigation} from "@react-navigation/native";
 
-export default function MDPReuissi() {
+export default function CodeAdresseMailVerif() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
-    const handleRetourConnexion = () => {
+    const handleNewMDP = () => {
         // @ts-ignore
-        navigation.navigate('Connexion');
-    };
-    const handlePorosite = () => {
-        // @ts-ignore
-        navigation.navigate('Connexion');
+        navigation.navigate('NouveauMDP');
     };
 
     return (
         <View style={styles.container}>
 
             <Image
-                source={require('../../../assets/imagesAzaali/SCNMP.png')}
+                source={require('../../../assets/imagesAzaali/MPO.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />
+
+            <Text style={styles.simpleText}>Un code de vérification vous a été envoyé sur </Text>
+            <Text style={styles.simpleText}>votre addresse E-mail.</Text>
+            <Text style={styles.simpleText}>Veuillez le saisir pour créer un nouveau mot</Text>
+            <Text style={styles.simpleText}>de passe !</Text>
             <Text></Text>
-            <Text style={styles.simpleText}>Félicitations, votre mot de passe a été</Text>
-            <Text style={styles.simpleText}>mis à jour avec succès !</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Code de vérification"
+                placeholderTextColor="#fff"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="numeric"
+            />
+
             <Text></Text>
-            <TouchableOpacity style={styles.loginButton} onPress={handleRetourConnexion}>
-                <Text style={styles.loginButtonText}>Page de Connexion</Text>
+            <TouchableOpacity style={styles.loginButton} onPress={handleNewMDP}>
+                <Text style={styles.loginButtonText}>Créer un nouveau mot de passe</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.loginButton} onPress={handlePorosite}>
-                <Text style={styles.loginButtonText}>Test de porosité</Text>
-            </TouchableOpacity>
+
         </View>
     );
 }
@@ -47,8 +53,8 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     logo: {
-        width: 230,
-        height: 230,
+        width: 250,
+        height: 250,
         marginBottom: 20,
     },
     input: {

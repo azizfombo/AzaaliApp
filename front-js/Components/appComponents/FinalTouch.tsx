@@ -1,12 +1,20 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from "@react-navigation/native";
+import {useState} from "react";
 
 
 export default function FinalTouch() {
+    const navigation = useNavigation();
+    const [codeVerif, setCodeVerif] = useState('');
+    const handleSuivant = () => {
+        // @ts-ignore
+        navigation.navigate('Splendide');
+    };
     return (
         <View style={styles.container}>
 
             <Image
-                source={require('@/assets/imagesAzaali/colombe.png')}
+                source={require('../../assets/imagesAzaali/colombe.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />
@@ -16,12 +24,22 @@ export default function FinalTouch() {
             <Text></Text>
             <Text></Text>
             <Text style={styles.simpleText}>Un e-mail de confirmation vous a été envoyé,</Text>
-            <Text style={styles.simpleText}>veuillez accéder à votre boite mail.</Text>
+            <Text style={styles.simpleText}>veuillez accéder à votre boite mail et saisir </Text>
+            <Text style={styles.simpleText}>pour créer un nouveau mot de passe.</Text>
             <Text></Text>
+
+            <TextInput
+                style={styles.input}
+                placeholder="Code de vérification"
+                placeholderTextColor="#fff"
+                value={codeVerif}
+                onChangeText={setCodeVerif}
+                keyboardType="numeric"
+            />
+
             <Text></Text>
-            <TouchableOpacity style={styles.loginButton} onPress={() => {
-            }}>
-                <Text style={styles.loginButtonText}>Page de Connexion</Text>
+            <TouchableOpacity style={styles.loginButton} onPress={handleSuivant}>
+                <Text style={styles.loginButtonText}>Créer un nouveau mot de passe</Text>
             </TouchableOpacity>
         </View>
     );

@@ -1,12 +1,14 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useNavigation} from "@react-navigation/native";
 
 
 export default function Splendide() {
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
 
             <Image
-                source={require('@/assets/imagesAzaali/Eclat.png')}
+                source={require('../../assets/imagesAzaali/Eclat.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />
@@ -21,8 +23,16 @@ export default function Splendide() {
             <Text></Text>
             <Text></Text>
             <TouchableOpacity style={styles.loginButton} onPress={() => {
+                // @ts-ignore
+                navigation.navigate('Connexion')
             }}>
                 <Text style={styles.loginButtonText}>Page de Connexion</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.loginButton} onPress={() => {
+                // @ts-ignore
+                navigation.navigate('Porosite')
+            }}>
+                <Text style={styles.loginButtonText}>Test de Porosité</Text>
             </TouchableOpacity>
         </View>
     );

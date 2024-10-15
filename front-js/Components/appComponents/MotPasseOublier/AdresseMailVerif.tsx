@@ -1,20 +1,22 @@
 import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import {useState} from "react";
+import {useNavigation} from "@react-navigation/native";
 
 export default function AdresseMailVerif() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const handleLogin = () => {
-        console.log("Conexion avevc ", email);
+    const navigation = useNavigation();
+    const handleNewMDP = () => {
+        // @ts-ignore
+        navigation.navigate('CodeAdresseMailVerif');
     };
 
     return (
         <View style={styles.container}>
 
             <Image
-                source={require('@/assets/imagesAzaali/MPO.png')}
+                source={require('../../../assets/imagesAzaali/MPO.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />
@@ -33,8 +35,8 @@ export default function AdresseMailVerif() {
             />
 
             <Text></Text>
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                <Text style={styles.loginButtonText}>Créer un nouveau mot de passe</Text>
+            <TouchableOpacity style={styles.loginButton} onPress={handleNewMDP}>
+                <Text style={styles.loginButtonText}>Suivant</Text>
             </TouchableOpacity>
 
         </View>

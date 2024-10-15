@@ -1,6 +1,6 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
-import {Circle, Defs, LinearGradient, Stop, Svg} from 'react-native-svg'; // Import for SVG elements
+import {Image, StyleSheet, Text, View, Animated, Easing} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {Circle, Defs, LinearGradient, Stop, Svg} from 'react-native-svg';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const humiditeRayon = 120;
@@ -11,27 +11,72 @@ const perimetreHumidite = 2 * Math.PI * humiditeRayon;
 const perimetrePetit = 2 * Math.PI * petitRayon;
 
 export default function Accueil() {
-    const [humidite, setHumidite] = useState(20);
-    const [uv, setUv] = useState(80);
-    const [iaq, setIaq] = useState(21);
+    const [humidite, setHumidite] = useState(50);
+    const [uv, setUv] = useState(25);
+    const [iaq, setIaq] = useState(50);
+
+    const [animatedHumiditeValue, setAnimatedHumiditeValue] = useState(0);
+    const [animatedUvValue, setAnimatedUvValue] = useState(0);
+    const [animatedIaqValue, setAnimatedIaqValue] = useState(0);
+
+    const animatedHumidite = useRef(new Animated.Value(0)).current;
+    const animatedUv = useRef(new Animated.Value(0)).current;
+    const animatedIaq = useRef(new Animated.Value(0)).current;
 
     const calculPourcentage = (pourcent: number, perimetre: number) => {
         return perimetre - (pourcent / 100) * perimetre;
     };
 
+    useEffect(() => {
+        Animated.timing(animatedHumidite, {
+            toValue: humidite,
+            duration: 2000,
+            useNativeDriver: false,
+            easing: Easing.out(Easing.ease),
+        }).start();
+
+        Animated.timing(animatedUv, {
+            toValue: uv,
+            duration: 2000,
+            useNativeDriver: false,
+            easing: Easing.out(Easing.ease),
+        }).start();
+
+        Animated.timing(animatedIaq, {
+            toValue: iaq,
+            duration: 2000,
+            useNativeDriver: false,
+            easing: Easing.out(Easing.ease),
+        }).start();
+
+        animatedHumidite.addListener(({value}) => {
+            setAnimatedHumiditeValue(Math.round(value));
+        });
+
+        animatedUv.addListener(({value}) => {
+            setAnimatedUvValue(Math.round(value));
+        });
+
+        animatedIaq.addListener(({value}) => {
+            setAnimatedIaqValue(Math.round(value));
+        });
+
+        return () => {
+            animatedHumidite.removeAllListeners();
+            animatedUv.removeAllListeners();
+            animatedIaq.removeAllListeners();
+        };
+    }, [humidite, uv, iaq]);
+
     return (
         <View style={styles.container}>
-
-            <Text></Text>
             <View style={styles.header}>
-                {/*<Icon name="leaf-outline" size={40} color="#b89c5a" />*/}
                 <Image source={require('../../assets/imagesAzaali/logo4.png')} style={styles.imageIcon}></Image>
-                <Icon name="cafe-outline" size={40} color="#b89c5a"/>
+                <Image source={require('../../assets/imagesAzaali/profil.png')} style={styles.imageIconProfil}></Image>
+                {/*<Icon name="cafe-outline" size={40} color="#b89c5a" />*/}
             </View>
             <Text style={styles.greeting}>Bonjour Abdoul-Aziz, le laid !</Text>
-            <Text></Text>
-            <Text></Text>
-            <Text></Text>
+
             <View style={styles.mainGauge}>
                 <Svg height="260" width="260">
                     <Defs>
@@ -50,7 +95,7 @@ export default function Accueil() {
                         fill="none"
                         strokeOpacity={0.2}
                     />
-                    <Circle
+                    <AnimatedCircle
                         cx="130"
                         cy="130"
                         r={humiditeRayon}
@@ -58,14 +103,17 @@ export default function Accueil() {
                         strokeWidth={strokeWidthHumidite}
                         fill="none"
                         strokeDasharray={`${perimetreHumidite}, ${perimetreHumidite}`}
-                        strokeDashoffset={calculPourcentage(humidite, perimetreHumidite)}
+                        strokeDashoffset={animatedHumidite.interpolate({
+                            inputRange: [0, 100],
+                            outputRange: [perimetreHumidite, calculPourcentage(humidite, perimetreHumidite)],
+                        })}
                         strokeLinecap="round"
                         rotation="-90"
                         origin="130, 130"
                     />
                 </Svg>
                 <Icon name="water" size={60} color="#b89c5a" style={styles.waterIcon}/>
-                <Text style={styles.gaugeValue}>{humidite} %</Text>
+                <Text style={styles.gaugeValue}>{animatedHumiditeValue}%</Text>
                 <Text style={styles.gaugeLabel}>Humidité</Text>
             </View>
 
@@ -87,7 +135,7 @@ export default function Accueil() {
                             fill="none"
                             strokeOpacity={0.2}
                         />
-                        <Circle
+                        <AnimatedCircle
                             cx="80"
                             cy="80"
                             r={petitRayon}
@@ -95,14 +143,17 @@ export default function Accueil() {
                             strokeWidth={strokeWidthPetit}
                             fill="none"
                             strokeDasharray={`${perimetrePetit}, ${perimetrePetit}`}
-                            strokeDashoffset={calculPourcentage(uv, perimetrePetit)}
+                            strokeDashoffset={animatedUv.interpolate({
+                                inputRange: [0, 100],
+                                outputRange: [perimetrePetit, calculPourcentage(uv, perimetrePetit)],
+                            })}
                             strokeLinecap="round"
                             rotation="-90"
                             origin="80, 80"
                         />
                     </Svg>
                     <Icon name="sunny" size={30} color="#b89c5a" style={styles.icon}/>
-                    <Text style={styles.gaugeValueSmall}>{uv} %</Text>
+                    <Text style={styles.gaugeValueSmall}>{animatedUvValue}%</Text>
                     <Text style={styles.gaugeLabelSmall}>UV</Text>
                 </View>
 
@@ -123,7 +174,7 @@ export default function Accueil() {
                             fill="none"
                             strokeOpacity={0.2}
                         />
-                        <Circle
+                        <AnimatedCircle
                             cx="80"
                             cy="80"
                             r={petitRayon}
@@ -131,26 +182,31 @@ export default function Accueil() {
                             strokeWidth={strokeWidthPetit}
                             fill="none"
                             strokeDasharray={`${perimetrePetit}, ${perimetrePetit}`}
-                            strokeDashoffset={calculPourcentage(iaq, perimetrePetit)}
+                            strokeDashoffset={animatedIaq.interpolate({
+                                inputRange: [0, 100],
+                                outputRange: [perimetrePetit, calculPourcentage(iaq, perimetrePetit)],
+                            })}
                             strokeLinecap="round"
                             rotation="-90"
                             origin="80, 80"
                         />
                     </Svg>
                     <Icon name="leaf" size={30} color="#b89c5a" style={styles.icon}/>
-                    <Text style={styles.gaugeValueSmall}>{iaq} %</Text>
-                    <Text style={styles.gaugeLabelSmall}>IQA 51</Text>
+                    <Text style={styles.gaugeValueSmall}>{animatedIaqValue}%</Text>
+                    <Text style={styles.gaugeLabelSmall}>IQA</Text>
                 </View>
             </View>
 
             <View style={styles.navBar}>
-                <Icon name="cafe" size={30} color="#b89c5a"/>
-                <Icon name="leaf-outline" size={30} color="#b89c5a"/>
-                <Icon name="calendar" size={30} color="#b89c5a"/>
+                <Icon name="cafe" size={35} color="#b89c5a"/>
+                <Icon name="leaf-outline" size={35} color="#b89c5a"/>
+                <Icon name="calendar" size={35} color="#b89c5a"/>
             </View>
         </View>
     );
 }
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const styles = StyleSheet.create({
     container: {
@@ -183,12 +239,13 @@ const styles = StyleSheet.create({
     },
     gaugeLabel: {
         color: '#b89c5a',
-        fontSize: 18,
-        marginTop: 5,
+        fontSize: 20,
+        position: 'absolute',
+        top: 160,
     },
     waterIcon: {
         position: 'absolute',
-        top: 60,
+        top: 45,
     },
     additionalGauges: {
         flexDirection: 'row',
@@ -205,6 +262,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     gaugeValueSmall: {
+        position: 'absolute',
         fontSize: 18,
         color: '#b89c5a',
         fontWeight: 'bold',
@@ -212,21 +270,29 @@ const styles = StyleSheet.create({
     },
     gaugeLabelSmall: {
         color: '#b89c5a',
-        fontSize: 16,
+        fontSize: 18,
+        position: 'absolute',
+        top: 95,
     },
     navBar: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '100%',
         position: 'absolute',
-        bottom: 20,
+        bottom: 45,
     },
     icon: {
         position: 'absolute',
+        top: 37,
     },
     imageIcon: {
         width: 40,
         height: 40,
+        marginBottom: 0,
+    },
+    imageIconProfil: {
+        width: 40,
+        height: 42.5,
         marginBottom: 0,
     },
 });

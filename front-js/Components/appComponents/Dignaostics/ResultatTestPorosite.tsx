@@ -1,24 +1,36 @@
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import React, {useState} from "react";
+import {useNavigation} from "@react-navigation/native";
 
 export default function ResultatTestPorosite() {
+    const navigation = useNavigation();
     const [selectedOption, setSelectedOption] = useState(null);
     return (
         <View style={styles.container}>
             <Text style={styles.title}>PARMI LES FIGURES SUIVANTS, LEQUEL CORRESPOND A VOTRE TES ?</Text>
             <TouchableOpacity onPress={() => setSelectedOption("Poursuivre")} style={styles.option}>
                 <Text
-                    style={selectedOption === 'Poursuivre' ? styles.selectedText : styles.optionText}>Poursuivre</Text>
+                    style={selectedOption === 'Poursuivre' ? styles.selectedText : styles.optionText}>Figure 1</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setSelectedOption('Plus tard')} style={styles.option}>
-                <Text style={selectedOption === 'Plus tard' ? styles.selectedText : styles.optionText}>Plus tard</Text>
+                <Text style={selectedOption === 'Plus tard' ? styles.selectedText : styles.optionText}>Figure 2</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => setSelectedOption('Plus tard')} style={styles.option}>
+                <Text style={selectedOption === 'Plus tard' ? styles.selectedText : styles.optionText}>Figure 3</Text>
             </TouchableOpacity>
             <View style={styles.navigation}>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity style={styles.navButton} onPress={() => {
+                    // @ts-ignore
+                    navigation.navigate('Patienter3minutes')
+                }}>
                     <Text style={styles.navText}>◀</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity style={styles.navButton} onPress={() => {
+                    // @ts-ignore
+                    navigation.navigate('PoursuivreDignostic')
+                }}>
                     <Text style={styles.navText}>▶</Text>
                 </TouchableOpacity>
             </View>

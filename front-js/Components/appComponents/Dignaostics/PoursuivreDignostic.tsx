@@ -1,8 +1,10 @@
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import React, {useState} from "react";
+import {useNavigation} from "@react-navigation/native";
 
 export default function PoursuivreDignostic() {
     const [selectedOption, setSelectedOption] = useState(null);
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <Text style={styles.title}>MAGNIFIQUE VOTRE TEST DE POROSITE A BIEN ETE PRIS EN COMPTE. TERMINEZ VOTRE
@@ -16,10 +18,24 @@ export default function PoursuivreDignostic() {
                 <Text style={selectedOption === 'Plus tard' ? styles.selectedText : styles.optionText}>Plus tard</Text>
             </TouchableOpacity>
             <View style={styles.navigation}>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity style={styles.navButton} onPress={() => {
+                    // @ts-ignore
+                    navigation.navigate('ResultatTestPorosite')
+                }}>
                     <Text style={styles.navText}>◀</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity style={styles.navButton} onPress={() => {
+                    if (selectedOption != null) {
+                        if (selectedOption === 'Poursuivre') {
+
+                        } else {
+                            // @ts-ignore
+                            navigation.navigate('Accueil');
+                        }
+                    } else {
+
+                    }
+                }}>
                     <Text style={styles.navText}>▶</Text>
                 </TouchableOpacity>
             </View>

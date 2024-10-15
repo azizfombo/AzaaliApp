@@ -1,20 +1,28 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import React from "react";
+import {useNavigation} from "@react-navigation/native";
 
 export default function BouleDansEau() {
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <Image
-                source={require('@/assets/imagesAzaali/MPO.png')}
+                source={require('../../../assets/imagesAzaali/MPO.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />
             <Text style={styles.title}>METTEZ VOTRE BOULE CHEVEUX DANS L'EAU</Text>
             <View style={styles.navigation}>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity style={styles.navButton} onPress={() => {
+                    // @ts-ignore
+                    navigation.navigate('CommencerTestPorosite')
+                }}>
                     <Text style={styles.navText}>◀</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.navButton}>
+                <TouchableOpacity style={styles.navButton} onPress={() => {
+                    // @ts-ignore
+                    navigation.navigate('Patienter3minutes')
+                }}>
                     <Text style={styles.navText}>▶</Text>
                 </TouchableOpacity>
             </View>

@@ -13,7 +13,14 @@ export default function Connexion() {
         // @ts-ignore
         navigation.navigate('Accueil');
     };
-
+    const handleForgetPass = () => {
+        // @ts-ignore
+        navigation.navigate('AdresseMailVerif');
+    };
+    const handleCreateAccount = () => {
+        // @ts-ignore
+        navigation.navigate('CreateAccount');
+    };
     return (
         <View style={styles.container}>
 
@@ -43,10 +50,10 @@ export default function Connexion() {
             />
 
             <View style={styles.linkContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleForgetPass}>
                     <Text style={styles.linkText}>Mot de passe oublié ?</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handleCreateAccount}>
                     <Text style={styles.linkText}>Créer un compte</Text>
                 </TouchableOpacity>
             </View>
@@ -80,7 +87,7 @@ const styles = StyleSheet.create({
         padding: 15,
         marginVertical: 10,
         backgroundColor: '#d7b354',
-        borderRadius: 30,
+        borderRadius: 15,
         color: '#fff',
         fontSize: 16,
         textAlign: 'center',

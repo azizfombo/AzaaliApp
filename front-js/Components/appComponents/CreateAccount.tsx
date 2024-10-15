@@ -1,6 +1,7 @@
 import {Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 
 import {useState} from "react";
+import {useNavigation} from "@react-navigation/native";
 
 export default function CreateAccount() {
     const [email, setEmail] = useState('');
@@ -13,8 +14,10 @@ export default function CreateAccount() {
     const [confirPassword, setConfirPassword] = useState('');
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const navigation = useNavigation();
     const handleLogin = () => {
-        console.log("Conexion avevc ", email);
+        // @ts-ignore
+        navigation.navigate('FinalTouch');
     };
     const onChangeDate = (event: any, selectedDate: Date) => {
         const currentDate = selectedDate || date;
