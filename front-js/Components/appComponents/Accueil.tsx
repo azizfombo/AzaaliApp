@@ -1,7 +1,8 @@
-import {Image, StyleSheet, Text, View, Animated, Easing} from 'react-native';
+import {Image, StyleSheet, Text, View, Animated, Easing, Alert} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {Circle, Defs, LinearGradient, Stop, Svg} from 'react-native-svg';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {getUserSession} from "../../conf/UserSession";
 
 const humiditeRayon = 120;
 const petitRayon = 70;
@@ -11,9 +12,9 @@ const perimetreHumidite = 2 * Math.PI * humiditeRayon;
 const perimetrePetit = 2 * Math.PI * petitRayon;
 
 export default function Accueil() {
-    const [humidite, setHumidite] = useState(50);
-    const [uv, setUv] = useState(25);
-    const [iaq, setIaq] = useState(50);
+    const [humidite, setHumidite] = useState(0);
+    const [uv, setUv] = useState(0);
+    const [iaq, setIaq] = useState(0);
 
     const [animatedHumiditeValue, setAnimatedHumiditeValue] = useState(0);
     const [animatedUvValue, setAnimatedUvValue] = useState(0);
@@ -22,12 +23,54 @@ export default function Accueil() {
     const animatedHumidite = useRef(new Animated.Value(0)).current;
     const animatedUv = useRef(new Animated.Value(0)).current;
     const animatedIaq = useRef(new Animated.Value(0)).current;
+    const [userName, setUserName] = useState('');
+
 
     const calculPourcentage = (pourcent: number, perimetre: number) => {
         return perimetre - (pourcent / 100) * perimetre;
     };
 
     useEffect(() => {
+        const getSessionAndCaract = async () => {
+            try {
+                const session = await getUserSession();
+                if (session) {
+                    const fullName = `${session.prenom} ${session.nom}`;
+                    setUserName(fullName);
+
+                    try {
+                        const response = await fetch(`http://192.168.0.102:8080/caracteristicsHair/afficher?email=${encodeURIComponent(session.email)}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data) {
+                                setHumidite(data.humidite);
+                                setIaq(data.uv);
+                                setUv(data.iqa);
+                            } else {
+                                Alert.alert("Erreur Serveur");
+                            }
+                        } else {
+                            Alert.alert("Erreur de connexion", "Une erreur est survenue lors de la connexion.");
+                        }
+                    } catch (error) {
+                        console.error("Erreur lors de la connexion : ", error);
+                        Alert.alert("Erreur serveur", "Impossible de se connecter au serveur.");
+                    }
+                } else {
+                    console.log("Aucune session utilisateur trouvée.");
+                }
+            } catch (error) {
+                console.error("Erreur lors de la vérification de la session utilisateur :", error);
+            }
+        };
+
+        getSessionAndCaract();
         Animated.timing(animatedHumidite, {
             toValue: humidite,
             duration: 2000,
@@ -75,7 +118,7 @@ export default function Accueil() {
                 <Image source={require('../../assets/imagesAzaali/profil.png')} style={styles.imageIconProfil}></Image>
                 {/*<Icon name="cafe-outline" size={40} color="#b89c5a" />*/}
             </View>
-            <Text style={styles.greeting}>Bonjour Abdoul-Aziz, le laid !</Text>
+            <Text style={styles.greeting}>Bonjour {userName} !</Text>
 
             <View style={styles.mainGauge}>
                 <Svg height="260" width="260">
