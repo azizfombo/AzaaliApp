@@ -31,9 +31,6 @@ export default function MDPReuissi() {
             <TouchableOpacity style={styles.loginButton} onPress={handleRetourConnexion}>
                 <Text style={styles.loginButtonText}>Page de Connexion</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.loginButton} onPress={handlePorosite}>
-                <Text style={styles.loginButtonText}>Test de porosité</Text>
-            </TouchableOpacity>
         </View>
     );
 }
